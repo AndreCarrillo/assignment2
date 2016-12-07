@@ -26,6 +26,9 @@
 #include <fcntl.h>
 
 using namespace std;
+
+//expression parser and function evaluator
+//just pass in string of integers to calculate(string) to get result
 class ExpressionParser
 {
 public:
@@ -770,7 +773,7 @@ int string_to_double(const  string& s)
 		return 0;
 	return x;
 }
-
+//calculate function
 int calculate(string s)
 {
 
@@ -824,7 +827,7 @@ vector<string> strsplit(string str) {
 
 	return res;
 }
-
+//declare global variables
 ifstream myFile2;
 string line;
 vector<string> input;
@@ -842,8 +845,9 @@ int *shm, *s[10];
 int beginidx;
 string string1;
 string string2;
-
 int p_count = 0;
+
+//read from file
 void assignment2() {
 
 	while (getline(myFile1, line)) {
@@ -957,29 +961,14 @@ void assignment2() {
 
 	}
 
-	/*	int shmid;
-	key_t key;
-	int *shm, *s[10];
-	key = 5678;
-
-	shmid = shmget(key, 27, IPC_CREAT | 0666);
-	shm = (int*)shmat(shmid, NULL, 0);
-	for (int i = 0; i < p_count; i++) {
-
-	s[i] = shm + i;
-	}
-	for (int i = 0; i < p_count; i++) {
-
-	*s[i] = data_map[internal_var[i]];
-	cout << *s[i] << endl;
-	}*/
+	
 }
 
 
 
 string st;
 
-
+//initialize shared memory
 int initializeshm() {
 	int shmid;
 	key_t key;
@@ -1002,12 +991,14 @@ int main(int argc, char* argv[3]) {
 	myFile2.open(string2.c_str());
 	assignment2();
 	initializeshm();
+	//initialize array of process id's
 	int pid[p_count];
 	sem_t *sem[10];
 	for (int i = 0; i < p_count; i++) {
 		string str = "sem-" + i;
 		sem[i] = sem_open(str.c_str(), O_CREAT, 0644, 0);
 	}
+	
 	for (int i = 0; i < p_count; i++) {
 		pid[i] = fork();
 		if (pid[i] == 0) {
